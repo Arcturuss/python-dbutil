@@ -13,12 +13,12 @@ with Python.
 
 ## Prerequisites
 
-* Python 2.6+
+* Python 3.6+
 * A DB API 2.0 compatible database driver
 
 ## Installation
 
-    pip install dbutil
+    ~pip install dbutil~ TODO...
 
 ## Usage
 
