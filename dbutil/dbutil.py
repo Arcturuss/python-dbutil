@@ -89,14 +89,14 @@ class DbCursor:
         for row in self.impl.execute(sql, params):
             yield dbrow_factory(self, row)
 
-    def scalar(self, sql, params=()):
+    def one(self, sql, params=()):
         """Returns a single value"""
         self.impl.execute(sql, params)
         if self.impl.rowcount == 0:
             return None
         return self.impl.fetchone()[0]
 
-    def one(self, sql, params=()):
+    def row(self, sql, params=()):
         """Returns a single row"""
         self.impl.execute(sql, params)
         if self.impl.rowcount == 0:

@@ -53,7 +53,7 @@ class DbConnectionTest(unittest.TestCase):
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
                 cur = con.cursor()
-                actual = td.map(cur.one(td.query))
+                actual = td.map(cur.row(td.query))
                 self.assertEqual(td.expected, actual)
 
     def test_scalar(self):
@@ -68,7 +68,7 @@ class DbConnectionTest(unittest.TestCase):
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
                 cur = con.cursor()
-                actual = cur.scalar(td.query)
+                actual = cur.one(td.query)
                 self.assertEqual(td.expected, actual)
 
 

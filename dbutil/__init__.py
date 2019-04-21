@@ -19,7 +19,7 @@ def _connect_mysql(url):
         params["port"] = url.port
     if url.path:
         params["db"] = url.path[1:]
-    return connection(db.connect(**params))
+    return DbConnection(db.connect(**params))
 
 
 def _connect_sqlite3(url):
