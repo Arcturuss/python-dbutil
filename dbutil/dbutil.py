@@ -89,7 +89,11 @@ class DbCursor:
 
     def iter(self, sql, params=()):
         """Yields each row from a SQL query"""
-        for row in self.impl.execute(sql, params):
+        self.impl.execute(sql, params)
+        while True:
+            row = self.impl.fetchone()
+            if row is None:
+                break
             yield dbrow_factory(self, row)
 
     def one(self, sql, params=()):
@@ -108,7 +112,9 @@ class DbCursor:
 
     def all(self, sql, params=()):
         """Returns all the results of a query"""
-        return list(self.iter(sql, params))
+        self.impl.execute(sql, params)
+        return list(map(lambda x: dbrow_factory(self, x),
+                        self.impl.fetchall()))
 
     def execute(self, sql, params=()):
         """Executes an SQL statement, returns number of rows affected"""
