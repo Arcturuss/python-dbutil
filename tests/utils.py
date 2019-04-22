@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import os
 import sqlite3
 import tempfile
+import psycopg2
 
 
 class DotDict(dict):
@@ -51,3 +52,40 @@ class TestDb():
             with sqlite3.connect(dbpath) as con:
                 con.executescript(self.starwars_sql)
                 yield con
+
+
+class TestDbPostgres():
+    def __init__(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        sqlfile_path = os.path.join(dir_path, "starwars_postgres.sql")
+        with open(sqlfile_path, 'r') as f:
+            self.starwars_sql = f.read()
+
+    @contextmanager
+    def connect(self,
+                host="localhost",
+                port=5432,
+                username="postgres",
+                password="3edc#EDC",
+                database="starwars"):
+        with psycopg2.connect(host=host,
+                              port=port,
+                              user=username,
+                              password=password,
+                              database=database) as con:
+
+            # for postgres autoincement
+            # self.starwars_sql = self.starwars_sql.replace('INTEGER', 'SERIAL')
+            # self.starwars_sql = self.starwars_sql.replace('IN (0, 1)', 'IN(true, false)')
+
+            queries = self.starwars_sql.split(';')
+            with con.cursor() as cur:
+                cur.execute('DROP SCHEMA public CASCADE;')
+                cur.execute('CREATE SCHEMA public;')
+                cur.execute('GRANT ALL ON SCHEMA public TO postgres;')
+                for q in queries:
+                    try:
+                        cur.execute(q)
+                    except Exception as e:
+                        print(e)
+            yield con

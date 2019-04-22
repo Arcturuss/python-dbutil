@@ -33,9 +33,28 @@ def _connect_sqlite3(url):
     return DbConnection(db.connect(**params))
 
 
+def _connect_postgres(url):
+    import psycopg2 as db
+    params = {}
+    if url.username:
+        params["user"] = url.username
+    else:
+        params["user"] = "postgres"
+    if url.password:
+        params["password"] = url.password
+    if url.hostname:
+        params["host"] = url.hostname
+    if url.port:
+        params["port"] = url.port
+    if url.path:
+        params["database"] = url.path[1:]
+    return DbConnection(db.connect(**params))
+
+
 DEFAULT_LOOKUP = {
     "sqlite3": _connect_sqlite3,
-    "mysql": _connect_mysql
+    "mysql": _connect_mysql,
+    "postgres": _connect_postgres,
 }
 
 
