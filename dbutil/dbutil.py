@@ -117,6 +117,7 @@ class DbConnection:
     """
     def __init__(self, impl):
         self.impl = impl
+        self.cur = self.cursor()
 
     def __getattr__(self, key):
         return getattr(self.impl, key)
@@ -129,3 +130,16 @@ class DbConnection:
 
     def cursor(self):
         return DbCursor(self.impl.cursor())
+
+    # pass calls to default cursor
+    def iter(self, sql, params=()):
+        return self.cur.iter(sql, params)
+
+    def one(self, sql, params=()):
+        return self.cur.one(sql, params)
+
+    def row(self, sql, params=()):
+        return self.cur.row(sql, params)
+
+    def all(self, sql, params=()):
+        return self.cur.all(sql, params)

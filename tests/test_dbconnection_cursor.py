@@ -1,10 +1,13 @@
+#!/usr/bin/env python3
+
 import unittest
+from unittest import mock
 from collections import namedtuple
 from dbutil import DbConnection
 from utils import TestDb
 
 
-class DbConnectionDefaultTest(unittest.TestCase):
+class DbConnectionCursorTest(unittest.TestCase):
     def test_iter(self):
         TestData = namedtuple('TestData', 'query map expected')
         tests = (
@@ -17,7 +20,8 @@ class DbConnectionDefaultTest(unittest.TestCase):
 
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
-                actual = [td.map(x) for x in con.iter(td.query)]
+                cur = con.cursor()
+                actual = [td.map(x) for x in cur.iter(td.query)]
                 self.assertEqual(td.expected, actual)
 
     def test_all(self):
@@ -32,7 +36,8 @@ class DbConnectionDefaultTest(unittest.TestCase):
 
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
-                actual = [td.map(x) for x in con.all(td.query)]
+                cur = con.cursor()
+                actual = [td.map(x) for x in cur.all(td.query)]
                 self.assertEqual(td.expected, actual)
 
     def test_one(self):
@@ -47,7 +52,8 @@ class DbConnectionDefaultTest(unittest.TestCase):
 
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
-                actual = td.map(con.row(td.query))
+                cur = con.cursor()
+                actual = td.map(cur.row(td.query))
                 self.assertEqual(td.expected, actual)
 
     def test_scalar(self):
@@ -61,7 +67,8 @@ class DbConnectionDefaultTest(unittest.TestCase):
 
         with TestDb().connect() as tcon, DbConnection(tcon) as con:
             for td in tests:
-                actual = con.one(td.query)
+                cur = con.cursor()
+                actual = cur.one(td.query)
                 self.assertEqual(td.expected, actual)
 
 
