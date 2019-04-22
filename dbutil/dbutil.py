@@ -110,6 +110,16 @@ class DbCursor:
         """Returns all the results of a query"""
         return list(self.iter(sql, params))
 
+    def execute(self, sql, params=()):
+        """Executes an SQL statement, returns number of rows affected"""
+        self.impl.execute(sql, params)
+        return self.impl.rowcount
+
+    def executemany(self, sql, params):
+        """Executes an SQL statement, returns number of rows affected"""
+        self.impl.executemany(sql, params)
+        return self.impl.rowcount
+
 
 class DbConnection:
     """
@@ -135,6 +145,9 @@ class DbConnection:
     def cursor(self):
         return DbCursor(self.impl.cursor())
 
+    def close(self):
+        self.__exit__()
+
     # pass calls to default cursor
     def iter(self, sql, params=()):
         return self.cur.iter(sql, params)
@@ -147,3 +160,9 @@ class DbConnection:
 
     def all(self, sql, params=()):
         return self.cur.all(sql, params)
+
+    def execute(self, sql, params=()):
+        return self.cur.execute(sql, params)
+
+    def executemany(self, sql, params):
+        return self.cur.executemany(sql, params)

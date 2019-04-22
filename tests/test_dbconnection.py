@@ -64,6 +64,40 @@ class DbConnectionDefaultTest(unittest.TestCase):
                 actual = con.one(td.query)
                 self.assertEqual(td.expected, actual)
 
+    def test_execute(self):
+        TestData = namedtuple('TestData', 'query rows select expected')
+        tests = (
+            TestData(
+                """insert into movies
+                (name, episode, director, release_year, chronology)
+                values ('test1', 'test', 'test', 1999, 42)""",
+                1,
+                "select release_year from movies where name='test1'",
+                1999
+            ),
+        )
+        with TestDb().connect() as tcon, DbConnection(tcon) as con:
+            for td in tests:
+                actual = con.execute(td.query)
+                self.assertEqual(td.rows, actual)
+                actual = con.one(td.select)
+                self.assertEqual(td.expected, actual)
+
+    def test_executemany(self):
+        query = """insert into movies
+                (name, episode, director, release_year, chronology)
+                values (?, ?, ?, ?, ?)"""
+        params = [
+            ['test2', 'test2', 'test2', 1111, 20],
+            ['test3', 'test3', 'test3', 2222, 21],
+        ]
+        select = "select release_year from movies where name='test3'"
+        with TestDb().connect() as tcon, DbConnection(tcon) as con:
+            actual = con.executemany(query, params)
+            self.assertEqual(2, actual)
+            actual = con.one(select)
+            self.assertEqual(2222, actual)
+
 
 if __name__ == '__main__' and __package__ is None:
     unittest.main()
