@@ -45,6 +45,7 @@ class DotDict(OrderedDict):
     A dot-able dict, which allows access via properties in addition to
     traditional dict key/value access.
     """
+
     def __init__(self, *args, **kwargs):
         super(DotDict, self).__init__(*args, **kwargs)
 
@@ -67,6 +68,7 @@ class DbRow(DotDict):
     """
     Represents a row in the database. Implemented as a dot-able dict.
     """
+
     def __init__(self, *args, **kwargs):
         super(DbRow, self).__init__(*args, **kwargs)
 
@@ -78,6 +80,7 @@ class DbCursor:
     Args:
         impl: Any DB-API v2.0 database cursor implementation
     """
+
     def __init__(self, impl):
         self.impl = impl
 
@@ -115,6 +118,7 @@ class DbConnection:
     Args:
         impl: Any DB-API v2.0 database connection
     """
+
     def __init__(self, impl):
         self.impl = impl
         self.cur = self.cursor()

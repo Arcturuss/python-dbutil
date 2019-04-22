@@ -9,6 +9,7 @@ class DotDict(dict):
     '''
     Quick and dirty implementation of a dot-able dict.
     '''
+
     def __init__(self, *args, **kwargs):
         super(DotDict, self).__init__(*args, **kwargs)
 
