@@ -5,7 +5,7 @@ import sqlite3
 import tempfile
 
 
-class DotDict(dict):
+class DotDict(OrderedDict):
     '''
     Quick and dirty implementation of a dot-able dict.
     '''

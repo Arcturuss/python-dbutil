@@ -1,7 +1,7 @@
 import unittest
 from collections import namedtuple
 from dbutil import DbConnection
-from utils import TestDb
+from .utils import TestDb
 
 
 class DbConnectionDefaultTest(unittest.TestCase):

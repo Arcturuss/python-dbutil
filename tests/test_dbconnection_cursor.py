@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 import unittest
-from unittest import mock
 from collections import namedtuple
 from dbutil import DbConnection
-from utils import TestDb
+from .utils import TestDb
 
 
 class DbConnectionCursorTest(unittest.TestCase):
