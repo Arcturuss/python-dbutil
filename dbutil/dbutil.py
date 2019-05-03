@@ -30,13 +30,13 @@ class DotDict(OrderedDict):
         try:
             del self[name]
         except KeyError as err:
-            raise AttributeError(f"Attribute not found {name}")
+            raise AttributeError("Attribute not found {0}".format(name))
 
     def __getattr__(self, k):
         try:
             return self[k]
         except KeyError as err:
-            raise AttributeError(f"Attribute not found {k}")
+            raise AttributeError("Attribute not found {0}".format(k))
 
     __setattr__ = OrderedDict.__setitem__
 

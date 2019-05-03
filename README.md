@@ -13,7 +13,7 @@ with Python.
 
 ## Prerequisites
 
-* Python 3.6+
+* Python 3.1+
 * A DB API 2.0 compatible database driver
 
 ## Installation
