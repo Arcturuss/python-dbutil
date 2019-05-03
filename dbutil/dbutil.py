@@ -17,29 +17,6 @@ def dbrow_factory(cur, row):
     return result
 
 
-def make_sqlparam(self, name, index=0, paramstyle='?'):
-    """Returns a sql parameter for the specified paramstyle"""
-    # we need to be extra careful with params to prevent injection.
-    if not isinstance(index, int):
-        raise ValueError(f"non-integer index value: {index}")
-    if ';' in name or "'" in name:
-        raise ValueError("Unsupported name value: {name}")
-
-    # https://www.python.org/dev/peps/pep-0249/#paramstyle
-    if paramstyle == 'qmark':
-        return '?'
-    elif paramstyle == 'numeric':
-        return f':{index}'
-    elif paramstyle == 'named':
-        return f':{name}'
-    elif paramstyle == 'format':
-        return f'%s'
-    elif paramstyle == 'pyformat':
-        return f'%({name})s'
-    else:
-        raise ValueError(f"Unsupported paramstyle: {paramstyle}")
-
-
 class DotDict(OrderedDict):
     """
     A dot-able dict, which allows access via properties in addition to
